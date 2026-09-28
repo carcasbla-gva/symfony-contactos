@@ -16,6 +16,7 @@ final class ContactoController extends AbstractController
     {
         // Comprobar si el usuario está logueado
         if (!$this->getUser()) {
+            $this->addFlash('warning', 'Debes iniciar sesión para añadir o modificar contactos.');
             return $this->redirectToRoute('inicio');
         }
 
