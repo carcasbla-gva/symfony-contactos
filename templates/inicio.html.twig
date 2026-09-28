@@ -1,9 +1,29 @@
 {% extends 'base.html.twig' %}
+
 {% block body %}
 	<h1>Contactos</h1>
 	<h2>Bienvenido a la web de contactos.</h2>
 	<p>Página de inicio</p>
+
+	<div style="margin-bottom: 20px;">
+		<a href="{{ path('nuevo_contacto') }}" class="btn">+ Añadir nuevo contacto</a>
+		{% if app.user %}
+			<span> | Conectado como: {{ app.user.name ?? app.user.userIdentifier }} | <a href="{{ path('app_logout') }}">Cerrar sesión</a></span>
+		{% else %}
+			<span> | <a href="{{ path('app_login') }}">Iniciar sesión</a> | <a href="{{ path('app_register') }}">Registrarse</a></span>
+		{% endif %}
+	</div>
+
+	<h3>Lista de contactos:</h3>
+	<ul>
 	{% for contacto in contactos %}
-		 {{ include ('partials/_contacto.html.twig', {'contacto': contacto})}}
+		<li>
+			<a href="{{ path('contacto', {'codigo': contacto.id}) }}">
+				<strong>{{ contacto.nombre }}</strong> ({{ contacto.telefono }})
+			</a>
+		</li>
+	{% else %}
+		<li>No hay contactos disponibles.</li>
 	{% endfor %}
+	</ul>
 {% endblock %}

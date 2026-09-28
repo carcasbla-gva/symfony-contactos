@@ -1,0 +1,30 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Añadir Nuevo Contacto{% endblock %}
+
+{% block body %}
+    <h1>Añadir Nuevo Contacto</h1>
+
+    <p><a href="{{ path('inicio') }}">&laquo; Volver al inicio</a></p>
+
+    <form method="POST" action="{{ path('nuevo_contacto') }}" style="max-width: 400px;">
+        <div style="margin-bottom: 10px;">
+            <label for="nombre">Nombre:</label><br>
+            <input type="text" id="nombre" name="nombre" required style="width: 100%;">
+        </div>
+
+        <div style="margin-bottom: 10px;">
+            <label for="telefono">Teléfono:</label><br>
+            <input type="text" id="telefono" name="telefono" required style="width: 100%;">
+        </div>
+
+        <div style="margin-bottom: 10px;">
+            <label for="email">E-mail:</label><br>
+            <input type="email" id="email" name="email" required style="width: 100%;">
+        </div>
+
+        <div style="margin-top: 15px;">
+            <button type="submit">Guardar Contacto</button>
+        </div>
+    </form>
+{% endblock %}
