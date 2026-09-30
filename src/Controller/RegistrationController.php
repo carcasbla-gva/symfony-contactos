@@ -32,6 +32,7 @@ class RegistrationController extends AbstractController
             $entityManager->flush();
 
             // do anything else you need here, like send an email
+            $this->addFlash('success', '¡Cuenta creada con éxito! Bienvenido/a a tu agenda.');
 
             return $security->login($user, 'form_login', 'main');
         }

@@ -3,28 +3,71 @@
 {% block title %}Añadir Nuevo Contacto{% endblock %}
 
 {% block body %}
-    <h1>Añadir Nuevo Contacto</h1>
+<div class="main-card form-card">
+    <div style="margin-bottom: 20px;">
+        <a href="{{ path('inicio') }}" class="btn btn-ghost btn-sm" style="margin-bottom: 12px; display: inline-flex;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            <span>Volver a la lista</span>
+        </a>
+        
+        <h1 class="page-title">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary);">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="8.5" cy="7" r="4"></circle>
+                <line x1="20" y1="8" x2="20" y2="14"></line>
+                <line x1="23" y1="11" x2="17" y2="11"></line>
+            </svg>
+            Nuevo contacto
+        </h1>
+        <p class="page-subtitle">Rellena los datos para guardar una nueva persona en tu agenda</p>
+    </div>
 
-    <p><a href="{{ path('inicio') }}">&laquo; Volver al inicio</a></p>
-
-    <form method="POST" action="{{ path('nuevo_contacto') }}" style="max-width: 400px;">
-        <div style="margin-bottom: 10px;">
-            <label for="nombre">Nombre:</label><br>
-            <input type="text" id="nombre" name="nombre" required style="width: 100%;">
+    <form method="POST" action="{{ path('nuevo_contacto') }}">
+        <div class="form-group">
+            <label for="nombre" class="form-label">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                Nombre completo:
+            </label>
+            <input type="text" id="nombre" name="nombre" required class="form-control" placeholder="Ej. Ana Pérez" autofocus>
         </div>
 
-        <div style="margin-bottom: 10px;">
-            <label for="telefono">Teléfono:</label><br>
-            <input type="text" id="telefono" name="telefono" required style="width: 100%;">
+        <div class="form-group">
+            <label for="telefono" class="form-label">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                </svg>
+                Teléfono:
+            </label>
+            <input type="text" id="telefono" name="telefono" required class="form-control" placeholder="Ej. 612345678">
         </div>
 
-        <div style="margin-bottom: 10px;">
-            <label for="email">E-mail:</label><br>
-            <input type="email" id="email" name="email" required style="width: 100%;">
+        <div class="form-group">
+            <label for="email" class="form-label">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                    <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+                Correo electrónico:
+            </label>
+            <input type="email" id="email" name="email" required class="form-control" placeholder="Ej. contacto@ejemplo.com">
         </div>
 
-        <div style="margin-top: 15px;">
-            <button type="submit">Guardar Contacto</button>
+        <div class="form-actions">
+            <a href="{{ path('inicio') }}" class="btn btn-secondary">Cancelar</a>
+            <button type="submit" class="btn btn-primary">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                Guardar contacto
+            </button>
         </div>
     </form>
+</div>
 {% endblock %}

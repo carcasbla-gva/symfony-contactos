@@ -21,9 +21,9 @@ final class ContactoController extends AbstractController
         }
 
         if ($request->isMethod('POST')) {
-            $nombre = $request->request->get('nombre');
-            $telefono = $request->request->get('telefono');
-            $email = $request->request->get('email');
+            $nombre = trim($request->request->get('nombre', ''));
+            $telefono = trim($request->request->get('telefono', ''));
+            $email = trim($request->request->get('email', ''));
 
             if ($nombre && $telefono && $email) {
                 $contacto = new Contacto();
@@ -35,7 +35,10 @@ final class ContactoController extends AbstractController
                 $entityManager->persist($contacto);
                 $entityManager->flush();
 
+                $this->addFlash('success', '¡Contacto "' . $contacto->getNombre() . '" creado con éxito!');
                 return $this->redirectToRoute('contacto', ['codigo' => $contacto->getId()]);
+            } else {
+                $this->addFlash('danger', 'Por favor, completa todos los campos requeridos.');
             }
         }
 
@@ -49,6 +52,7 @@ final class ContactoController extends AbstractController
         $contacto = $repositorio->find($codigo);
 
         if (!$contacto) {
+            $this->addFlash('danger', 'El contacto solicitado no existe.');
             return $this->redirectToRoute('inicio');
         }
 
@@ -56,6 +60,7 @@ final class ContactoController extends AbstractController
         if ($request->isMethod('POST')) {
             // Comprobar si el usuario está logueado
             if (!$this->getUser()) {
+                $this->addFlash('warning', 'Debes iniciar sesión para realizar esta acción.');
                 return $this->redirectToRoute('inicio');
             }
 
@@ -68,11 +73,14 @@ final class ContactoController extends AbstractController
                 $contacto->setEmail($request->request->get('email'));
                 $entityManager->flush();
 
+                $this->addFlash('success', '¡Contacto "' . $contacto->getNombre() . '" actualizado con éxito!');
                 return $this->redirectToRoute('contacto', ['codigo' => $contacto->getId()]);
             } elseif ($accion === 'borrar') {
+                $nombreEliminado = $contacto->getNombre();
                 $entityManager->remove($contacto);
                 $entityManager->flush();
 
+                $this->addFlash('info', 'El contacto "' . $nombreEliminado . '" ha sido eliminado.');
                 return $this->redirectToRoute('inicio');
             }
         }

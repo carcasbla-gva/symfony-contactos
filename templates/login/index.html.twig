@@ -1,75 +1,71 @@
 {% extends 'base.html.twig' %}
 
-
-
-{% block title %}Log in!{% endblock %}
-
-
+{% block title %}Iniciar sesión | AgendaApp{% endblock %}
 
 {% block body %}
+<div class="main-card form-card">
+    <div style="text-align: center; margin-bottom: 24px;">
+        <div class="brand-icon" style="width: 48px; height: 48px; margin: 0 auto 12px;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+        </div>
+        <h1 class="page-title" style="justify-content: center;">Iniciar sesión</h1>
+        <p class="page-subtitle" style="margin-bottom: 0;">Introduce tus credenciales para acceder a tu agenda</p>
+    </div>
 
-    <form method="post">
-
-        {% if error %}
-
-            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-
-        {% endif %}
-
-
-
-        {% if app.user %}
-
-            <div class="mb-3">
-
-                You are logged in as {{ app.user.userIdentifier }}, <a href="{{ logout_path() }}">Logout</a>
-
+    {% if error %}
+        <div class="toast toast-danger" style="margin-bottom: 18px; position: static; animation: none;">
+            <div class="toast-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
             </div>
+            <div class="toast-content">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        </div>
+    {% endif %}
 
-        {% endif %}
+    <form method="post" action="{{ path('app_login') }}">
+        <div class="form-group">
+            <label for="username" class="form-label">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                    <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+                Correo electrónico:
+            </label>
+            <input type="email" value="{{ last_username }}" name="_username" id="username" class="form-control" autocomplete="email" required autofocus placeholder="usuario@ejemplo.com">
+        </div>
 
-
-
-        <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-
-        <label for="username">Email</label>
-
-        <input type="email" value="{{ last_username }}" name="_username" id="username" class="form-control" autocomplete="email" required autofocus>
-
-        <label for="password">Password</label>
-
-        <input type="password" name="_password" id="password" class="form-control" autocomplete="current-password" required>
+        <div class="form-group">
+            <label for="password" class="form-label">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+                Contraseña:
+            </label>
+            <input type="password" name="_password" id="password" class="form-control" autocomplete="current-password" required placeholder="••••••••">
+        </div>
 
         <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
 
-
-
-        {#
-
-            Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
-
-            See https://symfony.com/doc/current/security/remember_me.html
-
-
-
-            <div class="checkbox mb-3">
-
-                <input type="checkbox" name="_remember_me" id="_remember_me">
-
-                <label for="_remember_me">Remember me</label>
-
-            </div>
-
-        #}
-
-
-
-        <button class="btn btn-lg btn-primary" type="submit">
-
-            Sign in
-
-        </button>
-
+        <div style="margin-top: 24px;">
+            <button class="btn btn-primary btn-block" type="submit">
+                <span>Entrar a mi agenda</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+            </button>
+        </div>
     </form>
 
+    <div style="text-align: center; margin-top: 16px; font-size: 0.9rem; color: var(--slate-600);">
+        ¿No tienes cuenta? <a href="{{ path('app_register') }}">Regístrate aquí</a>
+    </div>
+</div>
 {% endblock %}

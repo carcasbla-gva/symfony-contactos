@@ -1,29 +1,121 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Agenda de Contactos | Inicio{% endblock %}
+
 {% block body %}
-	<h1>Contactos</h1>
-	<h2>Bienvenido a la web de contactos.</h2>
-	<p>Página de inicio</p>
+<div class="main-card">
+    <div class="actions-bar">
+        <div>
+            <h1 class="page-title">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary);">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="8.5" cy="7" r="4"></circle>
+                    <line x1="20" y1="8" x2="20" y2="14"></line>
+                    <line x1="23" y1="11" x2="17" y2="11"></line>
+                </svg>
+                Contactos
+            </h1>
+            <p class="page-subtitle">Gestiona y consulta tu lista de contactos fácilmente</p>
+        </div>
 
-	<div style="margin-bottom: 20px;">
-		<a href="{{ path('nuevo_contacto') }}" class="btn">+ Añadir nuevo contacto</a>
-		{% if app.user %}
-			<span> | Conectado como: {{ app.user.name ?? app.user.userIdentifier }} | <a href="{{ path('app_logout') }}">Cerrar sesión</a></span>
-		{% else %}
-			<span> | <a href="{{ path('app_login') }}">Iniciar sesión</a> | <a href="{{ path('app_register') }}">Registrarse</a></span>
-		{% endif %}
-	</div>
+        <a href="{{ path('nuevo_contacto') }}" class="btn btn-primary">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            Nuevo contacto
+        </a>
+    </div>
 
-	<h3>Lista de contactos:</h3>
-	<ul>
-	{% for contacto in contactos %}
-		<li>
-			<a href="{{ path('contacto', {'codigo': contacto.id}) }}">
-				<strong>{{ contacto.nombre }}</strong> ({{ contacto.telefono }})
-			</a>
-		</li>
-	{% else %}
-		<li>No hay contactos disponibles.</li>
-	{% endfor %}
-	</ul>
+    {% if contactos|length > 0 %}
+        <!-- Real-time Filter/Search Bar -->
+        <div class="search-box" style="margin-bottom: 20px;">
+            <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="contact-search" class="search-input" placeholder="Buscar por nombre, teléfono o correo..." autocomplete="off">
+        </div>
+
+        <!-- Contact Cards Grid -->
+        <div class="contact-grid" id="contact-grid">
+            {% for contacto in contactos %}
+                <div class="contact-card" 
+                     data-name="{{ contacto.nombre }}" 
+                     data-phone="{{ contacto.telefono }}" 
+                     data-email="{{ contacto.email }}">
+                    <div>
+                        <div class="contact-card-header">
+                            <div class="contact-avatar">
+                                {{ contacto.nombre|first|upper }}
+                            </div>
+                            <div class="contact-info">
+                                <h3 class="contact-name" title="{{ contacto.nombre }}">{{ contacto.nombre }}</h3>
+                            </div>
+                        </div>
+
+                        <div class="contact-details">
+                            <a href="tel:{{ contacto.telefono }}" class="contact-detail-item" title="Llamar a {{ contacto.telefono }}">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                                </svg>
+                                <span>{{ contacto.telefono }}</span>
+                            </a>
+                            <a href="mailto:{{ contacto.email }}" class="contact-detail-item" title="Enviar correo a {{ contacto.email }}">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                    <polyline points="22,6 12,13 2,6"></polyline>
+                                </svg>
+                                <span>{{ contacto.email }}</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="contact-card-actions">
+                        <span style="font-size: 0.8rem; color: var(--slate-400);">ID #{{ contacto.id }}</span>
+                        <a href="{{ path('contacto', {'codigo': contacto.id}) }}" class="btn btn-secondary btn-sm">
+                            <span>Ver ficha</span>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="9 18 15 12 9 6"></polyline>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- No results filter feedback -->
+        <div id="no-search-results" class="empty-state" style="display: none; margin-top: 20px;">
+            <div class="empty-state-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+            </div>
+            <h3 class="empty-state-title">Sin resultados de búsqueda</h3>
+            <p class="empty-state-desc">No se encontraron contactos que coincidan con tu búsqueda.</p>
+        </div>
+    {% else %}
+        <!-- Empty State if no contacts in DB -->
+        <div class="empty-state">
+            <div class="empty-state-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+            </div>
+            <h3 class="empty-state-title">No hay contactos registrados</h3>
+            <p class="empty-state-desc">Comienza añadiendo a tu primer contacto a la agenda.</p>
+            <a href="{{ path('nuevo_contacto') }}" class="btn btn-primary">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                Crear primer contacto
+            </a>
+        </div>
+    {% endif %}
+</div>
 {% endblock %}

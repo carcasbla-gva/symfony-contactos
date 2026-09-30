@@ -1,51 +1,112 @@
 {% extends "base.html.twig" %}
 
-{% block title %}Ficha del contacto{% endblock %}
+{% block title %}Ficha de {{ contacto.nombre ?? 'Contacto' }}{% endblock %}
 
 {% block body %}
+<div class="main-card form-card">
     {% if contacto %}
-        <h1>Ficha del contacto</h1>
-        
-        <p><a href="{{ path('inicio') }}">&laquo; Volver al inicio</a></p>
+        <div style="margin-bottom: 20px;">
+            <a href="{{ path('inicio') }}" class="btn btn-ghost btn-sm" style="margin-bottom: 12px; display: inline-flex;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                <span>Volver a la lista</span>
+            </a>
+            
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <div class="contact-avatar" style="width: 58px; height: 58px; font-size: 1.4rem;">
+                    {{ contacto.nombre|first|upper }}
+                </div>
+                <div>
+                    <h1 class="page-title" style="margin-bottom: 0;">{{ contacto.nombre }}</h1>
+                    <span style="font-size: 0.85rem; color: var(--slate-500);">ID de registro #{{ contacto.id }}</span>
+                </div>
+            </div>
+        </div>
 
-        <form method="POST" action="{{ path('contacto', {'codigo': contacto.id}) }}" style="max-width: 400px; margin-bottom: 30px;">
-            <div style="margin-bottom: 10px;">
-                <label for="nombre">Nombre:</label><br>
-                <input type="text" id="nombre" name="nombre" value="{{ contacto.nombre }}" required style="width: 100%;">
+        <form method="POST" action="{{ path('contacto', {'codigo': contacto.id}) }}" id="form-contacto">
+            <div class="form-group">
+                <label for="nombre" class="form-label">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    Nombre completo:
+                </label>
+                <input type="text" id="nombre" name="nombre" value="{{ contacto.nombre }}" required class="form-control" placeholder="Ej. Ana Pérez">
             </div>
 
-            <div style="margin-bottom: 10px;">
-                <label for="telefono">Teléfono:</label><br>
-                <input type="text" id="telefono" name="telefono" value="{{ contacto.telefono }}" required style="width: 100%;">
+            <div class="form-group">
+                <label for="telefono" class="form-label">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                    </svg>
+                    Teléfono:
+                </label>
+                <input type="text" id="telefono" name="telefono" value="{{ contacto.telefono }}" required class="form-control" placeholder="Ej. 612345678">
             </div>
 
-            <div style="margin-bottom: 10px;">
-                <label for="email">E-mail:</label><br>
-                <input type="email" id="email" name="email" value="{{ contacto.email }}" required style="width: 100%;">
+            <div class="form-group">
+                <label for="email" class="form-label">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                        <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                    Correo electrónico:
+                </label>
+                <input type="email" id="email" name="email" value="{{ contacto.email }}" required class="form-control" placeholder="Ej. contacto@ejemplo.com">
             </div>
 
-            <div style="margin-top: 15px;">
-                <!-- Formulario con múltiples botones -->
-                <button type="submit" name="accion" value="guardar">Guardar / Modificar</button>
-                <button type="submit" name="accion" value="borrar" onclick="return confirm('¿Estás seguro de que deseas borrar este contacto?')">Borrar</button>
+            <div class="form-actions">
+                <button type="button" 
+                        class="btn btn-danger" 
+                        name="accion" 
+                        value="borrar" 
+                        data-confirm-delete 
+                        data-contact-name="{{ contacto.nombre }}">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    </svg>
+                    Eliminar
+                </button>
+
+                <button type="submit" name="accion" value="guardar" class="btn btn-primary">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                        <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                        <polyline points="7 3 7 8 15 8"></polyline>
+                    </svg>
+                    Guardar cambios
+                </button>
             </div>
         </form>
 
-        <hr>
-
-        <div style="background-color: #f8f9fa; padding: 15px; border-left: 4px solid #007bff; margin-top: 20px;">
-            <h3>¿Cómo gestionar un formulario con varios botones en Symfony?</h3>
-            <p>Para gestionar un formulario HTML que tiene múltiples botones de acción (por ejemplo, <strong>Guardar</strong> y <strong>Borrar</strong>):</p>
-            <ul>
-                <li><strong>En la plantilla Twig (HTML):</strong> Se asigna el mismo atributo <code>name</code> a cada botón (ej. <code>name="accion"</code>) y valores distintos en <code>value</code> (ej. <code>value="guardar"</code> y <code>value="borrar"</code>).</li>
-                <li><strong>En el Controlador:</strong> Se captura el valor enviado recuperando el parámetro desde la petición HTTP:
-                    <br><code>$accion = $request->request->get('accion');</code>
-                </li>
-                <li>Con una estructura condicional <code>if ($accion === 'guardar')</code> o <code>elseif ($accion === 'borrar')</code>, el controlador ejecuta la lógica correspondiente según el botón pulsado.</li>
-            </ul>
+        <div class="info-box">
+            <h4 class="info-box-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary);">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                </svg>
+                Gestión de múltiples acciones en Symfony
+            </h4>
+            <p>Este formulario utiliza un modal interactivo para solicitar confirmación antes de borrar, y captura el parámetro <code>$request->request->get('accion')</code> en el controlador para discriminar entre guardar o eliminar.</p>
         </div>
     {% else %}
-        <p>No se ha encontrado el contacto.</p>
-        <p><a href="{{ path('inicio') }}">Volver a la portada</a></p>
+        <div class="empty-state">
+            <div class="empty-state-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="15" y1="9" x2="9" y2="15"></line>
+                    <line x1="9" y1="9" x2="15" y2="15"></line>
+                </svg>
+            </div>
+            <h3 class="empty-state-title">Contacto no encontrado</h3>
+            <p class="empty-state-desc">El contacto que buscas no existe o ha sido eliminado.</p>
+            <a href="{{ path('inicio') }}" class="btn btn-secondary">Volver al inicio</a>
+        </div>
     {% endif %}
+</div>
 {% endblock %}
